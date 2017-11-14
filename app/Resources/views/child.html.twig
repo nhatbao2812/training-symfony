@@ -1,0 +1,13 @@
+{% extends 'test.html.twig' %}
+
+{% block title %}My cool blog posts{% endblock %}
+
+
+{% block sidebar %}
+    <a href="{{ path('hello_get') }}">he</a>
+    {{ parent() }}
+    <li><a href="/hello">Hello</a></li>
+    {% endblock %}
+
+{% block body %}
+{% endblock %}

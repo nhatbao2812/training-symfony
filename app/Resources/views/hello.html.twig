@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="{{ asset('js/jquery-3.2.1.js') }}"></script>
+    <script type="text/javascript">
+        function loadAjax(){
+            //prevent default event of element
+            event.preventDefault();
+            $.ajax({
+                method: "POST",
+                url: "/hello",
+                dataType: "text",
+                data: { hello : $("#hello").val()},
+                success: function(result){
+                    result = JSON.parse(result);
+                    if(result.status === 200) {
+                        $("#a").html(result.data);
+                    } else {
+                        $("#a").html('fail');
+                    }
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function uploadFile(){
+            var formData = new FormData();
+            formData.append('file', $('#file')[0].files[0]);
+            event.preventDefault();
+            $.ajax({
+                method: "POST",
+                url: "/upload",
+                data : formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,
+                success: function(result){
+                    result = JSON.parse(result);
+                    if(result.status === 200) {
+                        $("#a").html(result.data);
+                    } else {
+                        $("#a").html('fail');
+                    }
+                },
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="result">
+<a id="a"></a>
+</div>
+
+{#<h1>{{ input }}</h1>#}
+{#<form action="/hello" method="post">#}
+<form  onsubmit="loadAjax()">
+    <div>Write anything: <input type="text" name="hello" id="hello"></div>
+    <div><input type="submit" value="Submit" ></div>
+</form>
+
+<form onsubmit="uploadFile()" enctype="multipart/form-data">
+    <div>Upload: <input type="file" id="file" name="file"></div>
+    <div><input type="submit" value="submit"></div>
+</form>
+
+{#</form>#}
+</body>
+</html>
